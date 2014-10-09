@@ -61,6 +61,19 @@ namespace JsonNet
         }
 
         [TestCase]
+        public void Value_Factory_Create_From_Stream()
+        {
+            using(System.IO.MemoryStream memory = new System.IO.MemoryStream())
+            {
+                System.IO.StreamWriter sw = new System.IO.StreamWriter(memory);
+                sw.Write("[0,1,2,4]");
+                sw.Flush();
+                memory.Seek(0,System.IO.SeekOrigin.Begin);
+                Value value = Factory.Create(ValueType.Array, memory);
+                Assert.AreEqual(4, value.Count);
+            }
+        }
+        [TestCase]
         public void Value_ValueSemantics()
         {
             Value double2_5 = this["double2_5"];
@@ -102,13 +115,6 @@ namespace JsonNet
             Assert.AreEqual(hashA.Count, hashAClone.Count);
             hashAClone["a"].String = "X";
             Assert.AreNotEqual(hashA["a"].String, hashAClone["a"].String);
-        }
-
-        [TestCase]
-        public void Value_ToString()
-        {
-            //string value = this["dynamic"].ToString();
-            //Assert.True(value.Contains("1"));
         }
 
         [TestCase]
