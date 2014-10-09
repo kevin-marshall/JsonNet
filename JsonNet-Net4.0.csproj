@@ -47,8 +47,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Factory.cs" />
+    <Compile Include="Internal\Array.cs" />
+    <Compile Include="Internal\Base.cs" />
+    <Compile Include="Internal\Dynamic.cs" />
+    <Compile Include="Internal\Hash.cs" />
+    <Compile Include="Internal\IO.cs" />
+    <Compile Include="Internal\Primitive.cs" />
+    <Compile Include="Internal\Reader.cs" />
+    <Compile Include="Internal\ValueCompare.cs" />
+    <Compile Include="Internal\ValueEnumerator.cs" />
+    <Compile Include="Internal\ValueHashCode.cs" />
+    <Compile Include="Internal\ValuePropertyDescriptor.cs" />
+    <Compile Include="Internal\Writer.cs" />
     <Compile Include="JsonNet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Value.cs" />
+    <Compile Include="ValueType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="JsonNet.snk" />

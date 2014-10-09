@@ -46,9 +46,17 @@
   <ItemGroup>
     <Compile Include="JsonNet.Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValueQC.cs" />
+    <Compile Include="Value_Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="JsonNet-Net4.0.csproj">
+      <Project>{ad4a8825-e043-4dc1-b945-756111e426a4}</Project>
+      <Name>JsonNet-Net4.0</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
