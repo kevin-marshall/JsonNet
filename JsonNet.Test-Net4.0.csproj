@@ -35,6 +35,9 @@
     <Reference Include="nunit.framework">
       <HintPath>dep\NUnit\2.6.3\bin\framework\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="QcNet">
+      <HintPath>dep\QcNet\develop\QcNet.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Factory_Test.cs" />
     <Compile Include="JsonNet.Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValueQC.cs" />

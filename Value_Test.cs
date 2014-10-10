@@ -47,6 +47,11 @@ namespace JsonNet
         }
 
         [TestCase]
+        public void Value_Meets_Requirements()
+        {
+            QcNet.ObjectQC.Test<Value>(this);
+        }
+        [TestCase]
         public void Value_Parsing()
         {
             /*

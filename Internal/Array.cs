@@ -4,6 +4,8 @@
     {
         private System.Collections.ObjectModel.ObservableCollection<Value> values = new System.Collections.ObjectModel.ObservableCollection<Value>();
         public Array() { }
+
+        /*
         public Array(int count)
         {
             for (int i = 0; i < count; ++i)
@@ -22,7 +24,7 @@
                 }
             }
             
-        }
+        }*/
 
         public void Clear() { values.Clear(); }
         public void Remove(string key) { }
