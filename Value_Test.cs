@@ -40,6 +40,27 @@ namespace JsonNet
             Set("hashB", Factory.Create(ValueType.Hash, "{\"A\":0}"));
             Set("hashC", Factory.Create(ValueType.Hash, "{\"B\":0}"));
             Set("hashD", Factory.Create(ValueType.Hash, "{\"Items\":[1,\"a\",false]}"));
+
+            Set("complexHashA", Factory.Create(ValueType.Hash, "{'a':[]}"));
+            Set("complexHashB", Factory.Create(ValueType.Hash, "{'a':[{},{}]}"));
+            Set("complexArrayA", Factory.Create(ValueType.Array, "[[],[]]"));
+        }
+
+        [TestCase]
+        public void Value_Parsing()
+        {
+            /*
+            Value v = Factory.Create(ValueType.Hash, "{'a':[]}");
+            Assert.AreEqual(0,v["a"].Count);
+            v = Factory.Create(ValueType.Hash, "{'a':[{}]}");
+            Assert.AreEqual(1, v["a"].Count);
+            v = Factory.Create(ValueType.Hash, "{'a':[{},{}]}");
+            Assert.AreEqual(2, v["a"].Count);
+            v = Factory.Create(ValueType.Hash, "{'a':[{'b':{}},{'c':{}}]}");
+            Assert.AreEqual(2, v["a"].Count);*/
+            Value v = Factory.Create(ValueType.Array, "[[],[]]");
+            Assert.AreEqual(2, v.Count);
+            string json = v.ToJson(true);
         }
 
         [TestCase]
@@ -155,7 +176,7 @@ namespace JsonNet
             v["b"].String = "b";
             Assert.AreEqual(3, v.GetProperties().Count);
         }
-
+        
         [TestCase]
         public void Value_Stress_Test()
         {

@@ -2,27 +2,47 @@
 {
     class IO
     {
-        public static void EatWhiteSpace(System.IO.StreamReader stream)
+        private bool ignoreWhiteSpace = true;
+        public System.Collections.Generic.Queue<char> diagnosticBuffer =
+            new System.Collections.Generic.Queue<char>();
+        public int Read(System.IO.StreamReader reader)
         {
-            while (System.Char.IsWhiteSpace((char)(stream.Peek()))) { stream.Read(); }
+            int ichar = reader.Read();
+            if (diagnosticBuffer.Count > 9) diagnosticBuffer.Dequeue();
+            if (ichar >= 0)
+            {
+                char ch = (char)ichar;
+                if(ignoreWhiteSpace)
+                {
+                    if(!System.Char.IsWhiteSpace(ch)) diagnosticBuffer.Enqueue(ch);
+                }
+                else{diagnosticBuffer.Enqueue(ch);}
+            }
+            while(diagnosticBuffer.Count > 10) diagnosticBuffer.Dequeue();
+            return ichar;
         }
 
-        public static void Eat(System.IO.StreamReader stream, char value)
+        public void EatWhiteSpace(System.IO.StreamReader stream)
         {
-            while (value == (char)(stream.Peek())) { stream.Read(); }
+            while (System.Char.IsWhiteSpace((char)(stream.Peek()))) { Read(stream); }// stream.Read(); }
         }
-        public static string Seek(System.IO.StreamReader stream, char value)
+
+        public void Eat(System.IO.StreamReader stream, char value)
+        {
+            while (value == (char)(stream.Peek())) { Read(stream);}// stream.Read(); }
+        }
+        public string Seek(System.IO.StreamReader stream, char value)
         {
             string result = "";
             while (stream.Peek() != (int)value)
             {
-                int i = stream.Read();
+                int i = Read(stream);// stream.Read();
                 result += (char)i;
             }
             return result;
         }
 
-        public static string Seek(System.IO.StreamReader stream, char[] values)
+        public string Seek(System.IO.StreamReader stream, char[] values)
         {
             string result = "";
             bool done = false;
@@ -37,7 +57,7 @@
                     }
 
                 }
-                int ch = stream.Read();
+                int ch = Read(stream);// stream.Read();
                 if (ch == -1) done = true;
                 else result += (char)(ch);
             }
