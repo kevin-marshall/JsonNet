@@ -67,10 +67,9 @@
 
         public void Write(System.IO.Stream stream)
         {
-            using(System.IO.StreamWriter sw = new System.IO.StreamWriter(stream,System.Text.Encoding.UTF8,1024))
-            {
-                sw.Write(ToString());
-            }
+            System.IO.StreamWriter sw = new System.IO.StreamWriter(stream, System.Text.Encoding.UTF8, 1024);
+            sw.Write(ToString());
+            sw.Flush();
         }
         public static string ArrayToString(Array value)
         {
