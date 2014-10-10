@@ -73,6 +73,22 @@ namespace JsonNet
                 Assert.AreEqual(4, value.Count);
             }
         }
+
+        [TestCase]
+        public void Value_Write_Read()
+        {
+            Value value = Factory.Create();
+            value["a"].String = "A";
+            using (System.IO.MemoryStream memory = new System.IO.MemoryStream())
+            {
+                value.Write(memory);
+                string smem = memory.ToString();
+                memory.Seek(0, System.IO.SeekOrigin.Begin);
+                Value v3 = Factory.Create();
+                v3.Read(memory);
+                Assert.True(value.Equals(v3));
+            }
+        }
         [TestCase]
         public void Value_ValueSemantics()
         {
