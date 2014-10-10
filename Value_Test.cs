@@ -155,5 +155,35 @@ namespace JsonNet
             v["b"].String = "b";
             Assert.AreEqual(3, v.GetProperties().Count);
         }
+
+        [TestCase]
+        public void Value_Stress_Test()
+        {
+            Value v = CreateHash(8, 5);//8,5 488280     10,5 12207030
+            int deepCount = v.DeepCount;
+            Value v2 = v.Clone();
+            Assert.AreEqual(v, v2);
+            v2 = null;
+
+            using (System.IO.MemoryStream memory = new System.IO.MemoryStream())
+            {
+                v.Write(memory);
+                memory.Seek(0, System.IO.SeekOrigin.Begin);
+                Value v3 = Factory.Create();
+                v3.Read(memory);
+                Assert.AreEqual(v, v3);
+            }
+        }
+
+        private Value CreateHash(int levels, int items_per_level)
+        {
+            Value value = Factory.Create();
+            if (levels == 0) return value;
+            for (int i = 0; i < items_per_level; ++i)
+            {
+                value["L" + levels.ToString() + "i" + i.ToString()] = CreateHash(levels - 1, items_per_level);
+            }
+            return value;
+        }
     }
 }

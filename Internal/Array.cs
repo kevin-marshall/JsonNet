@@ -115,6 +115,8 @@
                 int total = Count;
                 for(int i = 0; i < Count; ++i)
                 {
+                    total = total + values[i].DeepCount;
+                    /*
                     if (values[i].ValueType == ValueType.Hash)
                     {
                         Hash h = values[i] as Hash;
@@ -124,7 +126,7 @@
                     {
                         Array a = values[i] as Array;
                         total = total + a.DeepCount;
-                    }
+                    }*/
                 }
                 return total;
             }

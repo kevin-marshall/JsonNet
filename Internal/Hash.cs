@@ -109,16 +109,7 @@
                 while(denum.MoveNext())
                 {
                     Value v = denum.Current.Value;
-                    if (v.ValueType == ValueType.Hash)
-                    {
-                        Hash h = v as Hash;
-                        total = total + h.DeepCount;
-                    }
-                    if (v.ValueType == ValueType.Array)
-                    {
-                        Internal.Array a = v as Internal.Array;
-                        total = total + a.DeepCount;
-                    }
+                    total = total + v.DeepCount;
                 }
                 return total;
             }
