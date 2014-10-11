@@ -3,7 +3,7 @@
 namespace JsonNet
 {
     [TestFixture]
-    public class Value_Test : System.Collections.Generic.Dictionary<string,Value>
+    public class Value_Test : QcNet.TestFixture<Value>
     {
         public void Set(string name,Value value)
         {
@@ -48,9 +48,9 @@ namespace JsonNet
         }
 
         [TestCase]
-        public void Value_Meets_Requirements()
+        public void Value_TestInstances()
         {
-            QcNet.ObjectQC.Test<Value>(this);
+            TestInstances();
         }
         [TestCase]
         public void Value_Parsing()
