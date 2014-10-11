@@ -85,6 +85,9 @@ namespace JsonNet
             Assert.AreEqual(2, value2.Count);
             value2.Remove("A");
             Assert.AreEqual(1, value2.Count);
+
+            Value a = JsonNet.Factory.Create("[]");
+            Assert.NotNull(a);
         }
 
         [TestCase]
