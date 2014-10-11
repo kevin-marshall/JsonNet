@@ -166,6 +166,7 @@
         {
             System.IO.StreamWriter sw = new System.IO.StreamWriter(stream, System.Text.Encoding.UTF8, 1024);
             sw.Write(Primitive.PrimitiveToString(this));
+            sw.Flush();
         }
 
         public void Read(System.IO.Stream stream)
