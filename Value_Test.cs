@@ -35,7 +35,8 @@ namespace JsonNet
             Set("strings_2", Factory.Create(ValueType.Array, "[\"A\",\"B\"]"));
             Set("numbers_5a", Factory.Create(ValueType.Array, "[0,1,2,3,4]"));
 
-            Set("empty", Factory.Create(ValueType.Hash, "{}"));
+            Set("emptyHash", Factory.Create(ValueType.Hash, "{}"));
+            Set("emptyArray", Factory.Create(ValueType.Hash, "[]"));
             Set("hashA", Factory.Create(ValueType.Hash, "{\"A\":0}"));
             Set("hashB", Factory.Create(ValueType.Hash, "{\"A\":0}"));
             Set("hashC", Factory.Create(ValueType.Hash, "{\"B\":0}"));
@@ -168,7 +169,10 @@ namespace JsonNet
             foreach(string key in Keys)
             {
                 Value v = this[key];
-                ValueQC.Test(v);
+                if (!object.ReferenceEquals(null, v))
+                {
+                    ValueQC.Test(v);
+                }
             }
         }
 
