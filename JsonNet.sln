@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonNet-Net4.0.Test", "JsonNet-Net4.0.Test.csproj", "{9851307A-27EA-4FF8-86DC-8D1DD6D1968C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonNet.Test", "JsonNet.Test.csproj", "{3D286CD8-6D09-426C-8059-1A50043885AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,12 +25,15 @@ Global
 		{AD4A8825-E043-4DC1-B945-756111E426A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD4A8825-E043-4DC1-B945-756111E426A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD4A8825-E043-4DC1-B945-756111E426A4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9851307A-27EA-4FF8-86DC-8D1DD6D1968C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9851307A-27EA-4FF8-86DC-8D1DD6D1968C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9851307A-27EA-4FF8-86DC-8D1DD6D1968C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9851307A-27EA-4FF8-86DC-8D1DD6D1968C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D286CD8-6D09-426C-8059-1A50043885AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D286CD8-6D09-426C-8059-1A50043885AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D286CD8-6D09-426C-8059-1A50043885AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D286CD8-6D09-426C-8059-1A50043885AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3D286CD8-6D09-426C-8059-1A50043885AB} = {80FE07B5-5634-4ED0-8337-764E857FA409}
 	EndGlobalSection
 EndGlobal
