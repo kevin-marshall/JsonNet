@@ -4,6 +4,8 @@
     {
         private System.Collections.ObjectModel.ObservableCollection<Value> values = new System.Collections.ObjectModel.ObservableCollection<Value>();
         public Array() { }
+
+        /*
         public Array(int count)
         {
             for (int i = 0; i < count; ++i)
@@ -22,7 +24,7 @@
                 }
             }
             
-        }
+        }*/
 
         public void Clear() { values.Clear(); }
         public void Remove(string key) { }
@@ -67,10 +69,9 @@
 
         public void Write(System.IO.Stream stream)
         {
-            using(System.IO.StreamWriter sw = new System.IO.StreamWriter(stream,System.Text.Encoding.UTF8,1024))
-            {
-                sw.Write(ToString());
-            }
+            System.IO.StreamWriter sw = new System.IO.StreamWriter(stream, System.Text.Encoding.UTF8, 1024);
+            sw.Write(ToString());
+            sw.Flush();
         }
         public static string ArrayToString(Array value)
         {
@@ -116,6 +117,8 @@
                 int total = Count;
                 for(int i = 0; i < Count; ++i)
                 {
+                    total = total + values[i].DeepCount;
+                    /*
                     if (values[i].ValueType == ValueType.Hash)
                     {
                         Hash h = values[i] as Hash;
@@ -125,7 +128,7 @@
                     {
                         Array a = values[i] as Array;
                         total = total + a.DeepCount;
-                    }
+                    }*/
                 }
                 return total;
             }

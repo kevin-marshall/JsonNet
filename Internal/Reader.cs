@@ -22,11 +22,15 @@
             return r.Read(stream) as Hash;
         }
 
+        private IO io = new IO();
+        
 
         public ValueType PeekValueType(System.IO.StreamReader reader)
         {
+            int ipeek = reader.Peek();
+            char cpeek = (char)ipeek;
             ValueType vtype = ValueType.Double;
-            switch (reader.Peek())
+            switch (ipeek)
             {
                 case (int)('{'):
                     vtype = ValueType.Hash;
@@ -52,7 +56,7 @@
             Value v = null;
             using (System.IO.StreamReader reader = new System.IO.StreamReader(stream))
             {
-                Internal.IO.EatWhiteSpace(reader);
+                io.EatWhiteSpace(reader);
                 ValueType vt = PeekValueType(reader);
                 switch (vt)
                 {
@@ -63,7 +67,7 @@
                         break;
                     case ValueType.Array:
                         //Array array = new Array();
-                        Value array = new Dynamic(ValueType.Array);//Array();//Dynamic();
+                        Value array = new Array();//ValueType.Array);//Array();//Dynamic();
                         ReadArray(reader, array);
                         v = array;
                         break;
@@ -79,29 +83,31 @@
 
         public void ReadHash(System.IO.StreamReader reader, Value hash)
         {
-            Internal.IO.Seek(reader, '{');
-            reader.Read();
+            io.Seek(reader, '{');
+            io.Read(reader);
+            //reader.Read();
             bool done = false;
             while (!done)
             {
-                Internal.IO.EatWhiteSpace(reader);
+                io.EatWhiteSpace(reader);
                 int ipeek = reader.Peek();
                 char cpeek = (char)ipeek;
                 if (ipeek == (int)('}'))
                 {
-                    reader.Read();
+                    io.Read(reader);
+                    //reader.Read();
                     done = true;
                 }
                 else
                 {
-                    // should be on a double quote character
+                    // should be on a double quote character (or a single quote character)
                     Primitive primitive = new Primitive();
                     ReadPrimitive(reader, primitive);
                     string key = primitive.String;
 
-                    Internal.IO.Seek(reader, ':');
-                    reader.Read();
-                    Internal.IO.EatWhiteSpace(reader);
+                    io.Seek(reader, ':');
+                    io.Read(reader);// reader.Read();
+                    io.EatWhiteSpace(reader);
 
                     ValueType vtype = PeekValueType(reader);
                     switch (vtype)
@@ -122,27 +128,36 @@
 
                     // , OR }, whichever comes first
                     char[] chars = { ',', '}' };
-                    Internal.IO.Seek(reader, chars);
+                    io.Seek(reader, chars);
                     //if (reader.Peek() == (int)('"')) IO.Seek(reader, '"');
+                    if (reader.Peek() == (int)('}')) { io.Read(reader); done = true; }// reader.Read();
                     if (reader.EndOfStream) done = true;
                 }
 
             }
-            if (reader.Peek() == (int)('}')) reader.Read();
+            //if (reader.Peek() == (int)('}')) reader.Read();
         }
 
         public void ReadArray(System.IO.StreamReader reader, Value array)
         {
-            Internal.IO.Seek(reader, '[');
-            reader.Read();
+            io.Seek(reader, '[');
+            io.Read(reader);// reader.Read();
 
             bool done = false;
             while (!done)
             {
-                char peekChar = (char)reader.Peek();
-                switch (reader.Peek())
+                io.EatWhiteSpace(reader);
+                int peek = reader.Peek();
+                char peekChar = (char)peek;
+                switch (peek)
                 {
                     case (int)(']'):
+                        {
+                            io.Read(reader);
+                            done = true;
+                            break;
+                        }
+                    case -1:
                         done = true;
                         break;
                     default:
@@ -155,58 +170,68 @@
                                 ReadHash(reader, array[array.Count - 1] as Hash);
                                 break;
                             case ValueType.Array:
-                                //array.Add(new Array());
                                 array[array.Count] = new Array();
                                 ReadArray(reader, array[array.Count - 1] as Array);
                                 break;
                             default:
                                 Primitive primitive = new Primitive();
                                 ReadPrimitive(reader, primitive);
-                                //array.Add(primitive);
                                 array[array.Count] = primitive;
                                 break;
                         }
                         // , OR ], whichever comes first
                         char[] chars = { ',', ']' };
-                        Internal.IO.Seek(reader, chars);
-                        if (reader.Peek() == (int)(',')) Internal.IO.Eat(reader, ',');
+                        io.Seek(reader, chars);
+                        if (reader.Peek() == ']') { io.Read(reader); done = true; }
+                        if (reader.Peek() == (int)(',')) io.Eat(reader, ',');
                         break;
                 }
             }
-            if (reader.Peek() == (int)(']')) reader.Read();
+            //if (reader.Peek() == (int)(']')) reader.Read();
         }
 
         public void ReadPrimitive(System.IO.StreamReader reader, Value value)
         {
-            Internal.IO.EatWhiteSpace(reader);
-            char[] chars = { 't', 'f', 'n', '"', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-            Internal.IO.Seek(reader, chars);
-            switch (reader.Peek())
+            io.EatWhiteSpace(reader);
+            char[] chars = { 't', 'f', 'n', '"', '\'', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+            string result;
+            io.Seek(reader, chars);
+            int peek = reader.Peek();
+            switch (peek)
             {
                 case (int)('t'):
-                    Internal.IO.Seek(reader, 'e');
+                    io.Seek(reader, 'e');
                     value.Bool = true;
-                    //primitive.Data = true;
                     break;
                 case (int)('f'):
-                    Internal.IO.Seek(reader, 'e');
-                    //primitive.Data = false;
+                    io.Seek(reader, 'e');
                     value.Bool = false;
                     break;
                 case (int)('n'):
-                    Internal.IO.Seek(reader, 'l');
-                    Internal.IO.Seek(reader, 'l');
-                    //primitive.Data = null;
+                    io.Seek(reader, 'l');
+                    io.Seek(reader, 'l');
                     value.IsNull = true;
                     break;
                 case (int)('"'):
-                    int c = reader.Read();
-                    string result = Internal.IO.Seek(reader, '"');
+                    int c = io.Read(reader);//reader.Read();
+                    result = io.Seek(reader, '"');
                     while (result.Length > 0 && result[result.Length - 1] == '\\')
                     {
-                        c = reader.Read();
+                        c = io.Read(reader);// reader.Read();
                         result = result.Substring(0, result.Length - 1) + "\"";
-                        result = result + Internal.IO.Seek(reader, '"');
+                        result = result + io.Seek(reader, '"');
+                    }
+                    //primitive.Data = result;
+                    value.String = result;
+                    break;
+                case (int)('\''):
+                    int c2 = io.Read(reader);//reader.Read();
+                    result = io.Seek(reader, '\'');
+                    while (result.Length > 0 && result[result.Length - 1] == '\\')
+                    {
+                        c2 = io.Read(reader);// reader.Read();
+                        result = result.Substring(0, result.Length - 1) + "'";
+                        result = result + io.Seek(reader, '\'');
                     }
                     //primitive.Data = result;
                     value.String = result;
@@ -214,7 +239,7 @@
                 default:
                     //char[] endchars = { '.','0','1','2','3','4','5','6','7','8','9' };
                     char[] endchars = { '}', ']', ',', ' ' };
-                    string dstring = Internal.IO.Seek(reader, endchars);
+                    string dstring = io.Seek(reader, endchars);
                     //primitive.Data = System.Convert.ToDouble(dstring);
                     value.Double = System.Convert.ToDouble(dstring);
                     break;

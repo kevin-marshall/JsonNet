@@ -7,11 +7,9 @@
             string result = "";
             using (System.IO.MemoryStream memory = new System.IO.MemoryStream())
             {
-                using (System.IO.StreamWriter writer = new System.IO.StreamWriter(memory, System.Text.Encoding.UTF8, 1024))
-                {
-                    Writer w = new Writer();
-                    w.Write(writer, value);
-                }
+                System.IO.StreamWriter writer = new System.IO.StreamWriter(memory, System.Text.Encoding.UTF8, 1024);
+                Writer w = new Writer();
+                w.Write(writer, value);
                 memory.Seek(0, System.IO.SeekOrigin.Begin);
                 using (System.IO.StreamReader reader = new System.IO.StreamReader(memory, System.Text.Encoding.UTF8, true, 1024))
                 {
@@ -46,6 +44,7 @@
                     writer.Write(value.Double.ToString());
                     break;
             }
+            writer.Flush();
         }
         public void WriteArray(System.IO.StreamWriter writer, Value value)
         {
@@ -56,6 +55,7 @@
                 Write(writer, value[i]);
             }
             writer.Write("]");
+            writer.Flush();
         }
 
         public void WriteHash(System.IO.StreamWriter writer, Value hash)
@@ -70,6 +70,7 @@
                 ++index;
             }
             writer.Write("}");
+            writer.Flush();
         }
     }
 }

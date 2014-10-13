@@ -3,7 +3,7 @@
 namespace JsonNet
 {
     [TestFixture]
-    public class Value_Test : System.Collections.Generic.Dictionary<string,Value>
+    public class Value_Test : QcNet.TestFixture<Value>
     {
         public void Set(string name,Value value)
         {
@@ -35,11 +35,38 @@ namespace JsonNet
             Set("strings_2", Factory.Create(ValueType.Array, "[\"A\",\"B\"]"));
             Set("numbers_5a", Factory.Create(ValueType.Array, "[0,1,2,3,4]"));
 
-            Set("empty", Factory.Create(ValueType.Hash, "{}"));
+            Set("emptyHash", Factory.Create(ValueType.Hash, "{}"));
+            Set("emptyArray", Factory.Create(ValueType.Hash, "[]"));
             Set("hashA", Factory.Create(ValueType.Hash, "{\"A\":0}"));
             Set("hashB", Factory.Create(ValueType.Hash, "{\"A\":0}"));
             Set("hashC", Factory.Create(ValueType.Hash, "{\"B\":0}"));
             Set("hashD", Factory.Create(ValueType.Hash, "{\"Items\":[1,\"a\",false]}"));
+
+            Set("complexHashA", Factory.Create(ValueType.Hash, "{'a':[]}"));
+            Set("complexHashB", Factory.Create(ValueType.Hash, "{'a':[{},{}]}"));
+            Set("complexArrayA", Factory.Create(ValueType.Array, "[[],[]]"));
+        }
+
+        [TestCase]
+        public void Value_TestInstances()
+        {
+            TestInstances();
+        }
+        [TestCase]
+        public void Value_Parsing()
+        {
+            /*
+            Value v = Factory.Create(ValueType.Hash, "{'a':[]}");
+            Assert.AreEqual(0,v["a"].Count);
+            v = Factory.Create(ValueType.Hash, "{'a':[{}]}");
+            Assert.AreEqual(1, v["a"].Count);
+            v = Factory.Create(ValueType.Hash, "{'a':[{},{}]}");
+            Assert.AreEqual(2, v["a"].Count);
+            v = Factory.Create(ValueType.Hash, "{'a':[{'b':{}},{'c':{}}]}");
+            Assert.AreEqual(2, v["a"].Count);*/
+            Value v = Factory.Create(ValueType.Array, "[[],[]]");
+            Assert.AreEqual(2, v.Count);
+            string json = v.ToJson(true);
         }
 
         [TestCase]
@@ -58,6 +85,9 @@ namespace JsonNet
             Assert.AreEqual(2, value2.Count);
             value2.Remove("A");
             Assert.AreEqual(1, value2.Count);
+
+            Value a = JsonNet.Factory.Create("[]");
+            Assert.NotNull(a);
         }
 
         [TestCase]
@@ -71,6 +101,22 @@ namespace JsonNet
                 memory.Seek(0,System.IO.SeekOrigin.Begin);
                 Value value = Factory.Create(ValueType.Array, memory);
                 Assert.AreEqual(4, value.Count);
+            }
+        }
+
+        [TestCase]
+        public void Value_Write_Read()
+        {
+            Value value = Factory.Create();
+            value["a"].String = "A";
+            using (System.IO.MemoryStream memory = new System.IO.MemoryStream())
+            {
+                value.Write(memory);
+                string smem = memory.ToString();
+                memory.Seek(0, System.IO.SeekOrigin.Begin);
+                Value v3 = Factory.Create();
+                v3.Read(memory);
+                Assert.True(value.Equals(v3));
             }
         }
         [TestCase]
@@ -126,7 +172,10 @@ namespace JsonNet
             foreach(string key in Keys)
             {
                 Value v = this[key];
-                ValueQC.Test(v);
+                if (!object.ReferenceEquals(null, v))
+                {
+                    ValueQC.Test(v);
+                }
             }
         }
 
@@ -138,6 +187,36 @@ namespace JsonNet
             v["a"].String = "a";
             v["b"].String = "b";
             Assert.AreEqual(3, v.GetProperties().Count);
+        }
+        
+        [TestCase]
+        public void Value_Stress_Test()
+        {
+            Value v = CreateHash(8, 5);//8,5 488280     10,5 12207030
+            int deepCount = v.DeepCount;
+            Value v2 = v.Clone();
+            Assert.AreEqual(v, v2);
+            v2 = null;
+
+            using (System.IO.MemoryStream memory = new System.IO.MemoryStream())
+            {
+                v.Write(memory);
+                memory.Seek(0, System.IO.SeekOrigin.Begin);
+                Value v3 = Factory.Create();
+                v3.Read(memory);
+                Assert.AreEqual(v, v3);
+            }
+        }
+
+        private Value CreateHash(int levels, int items_per_level)
+        {
+            Value value = Factory.Create();
+            if (levels == 0) return value;
+            for (int i = 0; i < items_per_level; ++i)
+            {
+                value["L" + levels.ToString() + "i" + i.ToString()] = CreateHash(levels - 1, items_per_level);
+            }
+            return value;
         }
     }
 }

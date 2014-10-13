@@ -17,10 +17,9 @@
 
         public void Write(System.IO.Stream stream)
         {
-            using (System.IO.StreamWriter sw = new System.IO.StreamWriter(stream, System.Text.Encoding.UTF8, 1024))
-            {
-                sw.Write(Internal.Writer.ToString(this));
-            }
+            System.IO.StreamWriter sw = new System.IO.StreamWriter(stream, System.Text.Encoding.UTF8, 1024);
+            sw.Write(Internal.Writer.ToString(this));
+            sw.Flush();
         }
 
         public void Read(System.IO.Stream stream)
@@ -110,16 +109,7 @@
                 while(denum.MoveNext())
                 {
                     Value v = denum.Current.Value;
-                    if (v.ValueType == ValueType.Hash)
-                    {
-                        Hash h = v as Hash;
-                        total = total + h.DeepCount;
-                    }
-                    if (v.ValueType == ValueType.Array)
-                    {
-                        Internal.Array a = v as Internal.Array;
-                        total = total + a.DeepCount;
-                    }
+                    total = total + v.DeepCount;
                 }
                 return total;
             }
