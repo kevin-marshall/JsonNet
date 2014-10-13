@@ -1,3 +1,7 @@
 require 'dev'
 
-TASKS.refresh
+task :pull do 
+  Dir.glob('dep/**/*.dll') {|f|
+    puts f
+  }
+end
