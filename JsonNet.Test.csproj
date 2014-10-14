@@ -32,12 +32,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework">
-      <HintPath>dep\NUnit\2.6.3\bin\framework\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>dep\github\lou-parslow\NetLibs\develop\NUnit\2.6.3\bin\framework\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="QcNet, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d4f6c7a98d7682da, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>dep\QcNet\develop\QcNet.dll</HintPath>
+      <HintPath>dep\github\lou-parslow\QcNet\develop\bin\Net4.0\QcNet.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
