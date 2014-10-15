@@ -47,7 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Array.cs" />
+    <Compile Include="CompareHelper.cs" />
     <Compile Include="Factory.cs" />
+    <Compile Include="Hash.cs" />
+    <Compile Include="HashCodeHelper.cs" />
     <Compile Include="Internal\Array.cs" />
     <Compile Include="Internal\Base.cs" />
     <Compile Include="Internal\Dynamic.cs" />
