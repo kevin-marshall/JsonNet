@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Array.cs" />
     <Compile Include="CompareHelper.cs" />
+    <Compile Include="CopyHelper.cs" />
     <Compile Include="Hash.cs" />
     <Compile Include="HashCodeHelper.cs" />
     <Compile Include="JsonNet.cs" />
