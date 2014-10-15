@@ -48,5 +48,11 @@
             if (item.GetType() == typeof(System.Boolean)) return true;
             return false;
         }
+
+        public override string ToString()
+        {
+            Writer writer = new Writer();
+            return writer.ToString(this);
+        }
     }
 }
