@@ -24,5 +24,25 @@ namespace JsonNet
 
         [TestCase]
         public void Hash_TestInstances() { base.TestInstances(); }
+
+        [TestCase]
+        public void Hash_Usage()
+        {
+            Hash h = new Hash();
+            h["string"] = "a";
+            h["bool"] = false;
+            h["null"] = null;
+            h["double"] = 1.5;
+            h["Array"] = new Array("[0,1,2,3]");
+            h["Hash"] = new Hash("{'a':0}");
+            Assert.AreEqual(6, h.Count);
+        }
+        [TestCase]
+        public void Hash_TestConstraints()
+        {
+            Hash hash = new Hash();
+            Assert.Throws<System.ArgumentOutOfRangeException>(() => hash["bad"]=System.DateTime.Now);
+            Assert.Throws<System.ArgumentOutOfRangeException>(() => hash.Add("date",System.DateTime.Now));
+        }
     }
 }

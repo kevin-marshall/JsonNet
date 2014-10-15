@@ -19,5 +19,34 @@
         public override bool Equals(object obj) { return CompareTo(obj) == 0 ? true : false; }
 
         public override int GetHashCode() { return HashCodeHelper.GetHashCode(this); }
+
+        public new object this[string key]
+        {
+            get { return base[key]; }
+            set
+            {
+                if (IsValidItem(value)) base[key] = value;
+                else throw new System.ArgumentOutOfRangeException(
+                        "only null,string,double,bool,Array,Hash instances are value for Hash.this[string key]");
+            }
+        }
+
+        public new void Add(string key,object value)
+        {
+            if (IsValidItem(value)) base.Add(key, value);
+            else throw new System.ArgumentOutOfRangeException(
+                        "only null,string,double,bool,Array,Hash instances are value for Hash.this[string key]");
+        }
+
+        private bool IsValidItem(object item)
+        {
+            if (object.ReferenceEquals(null, item)) return true;
+            if (item.GetType() == typeof(System.String)) return true;
+            if (item.GetType() == typeof(Hash)) return true;
+            if (item.GetType() == typeof(System.Double)) return true;
+            if (item.GetType() == typeof(Array)) return true;
+            if (item.GetType() == typeof(System.Boolean)) return true;
+            return false;
+        }
     }
 }
