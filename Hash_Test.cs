@@ -37,6 +37,26 @@ namespace JsonNet
             h["Hash"] = new Hash("{'a':0}");
             Assert.AreEqual(6, h.Count);
         }
+
+        [TestCase]
+        public void Hash_Xml_Transformations()
+        {
+            Assert.IsNull(XmlTransform.ToXml(null));
+            Assert.IsNull(XmlTransform.FromXml(null));
+
+            foreach(string key in Keys)
+            {
+                Hash hash = this[key];
+                string json = hash.ToString();
+                System.Xml.XmlDocument xdoc = XmlTransform.ToXml(hash);
+                string xml = XmlTransform.ToString(xdoc);
+                Assert.NotNull(xdoc);
+                Hash hash2 = XmlTransform.FromXml(xdoc) as Hash;
+                Assert.NotNull(hash2);
+                //Assert.True(hash.Equals(hash2));
+            }
+        }
+
         [TestCase]
         public void Hash_TestConstraints()
         {

@@ -55,6 +55,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reader.cs" />
     <Compile Include="Writer.cs" />
+    <Compile Include="XmlTransform.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="JsonNet.snk" />
