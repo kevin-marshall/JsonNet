@@ -10,7 +10,7 @@
             }
         }
 
-        public static void Write(object value,System.IO.Stream stream)
+        public static void WriteToStream(object value,System.IO.Stream stream)
         {
             using(Writer writer = new Writer())
             {
