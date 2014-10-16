@@ -1,6 +1,7 @@
 require 'dev_tasks'
 
 task :update_dependencies do
+  Console.announce_task_start 'update_dependencies'
   if(DEV_TASKS.has_key?(:branch) && DEV_TASKS[:branch]=='develop')
     # QcNet.dll,nunit.framework.dll
     ["nunit.framework.dll","QcNet.dll"].each{|f|
