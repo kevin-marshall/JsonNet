@@ -6,13 +6,11 @@
         public Array() { }
         public Array(string json) 
         {
-            Reader reader = new Reader();
-            Array array = reader.Read(json) as Array;
-            for(int i = 0; i < array.Count; ++i)
-            {
-                Add(array[i]);
-            }
+            Array array = Reader.Parse(json) as Array;
+            for(int i = 0; i < array.Count; ++i){Add(array[i]);}
         }
+
+        public object Clone() { return new Array(Writer.ToJson(this)); }
         
         public int CompareTo(object value){return CompareHelper.Compare(this, value);}
 

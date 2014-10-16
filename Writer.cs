@@ -2,7 +2,7 @@
 {
     public class Writer : System.IDisposable
     {
-        public static string ToJson(string value)
+        public static string ToJson(object value)
         {
             using(Writer writer = new Writer())
             {
