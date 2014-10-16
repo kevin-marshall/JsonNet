@@ -39,6 +39,27 @@ namespace JsonNet
         }
 
         [TestCase]
+        public void Hash_Xml_TransformationsA()
+        {
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetAssembly(typeof(Hash_Test));
+            foreach(string name in assembly.GetManifestResourceNames())
+            {
+                if(name.Contains(".xml"))
+                {
+                    System.Xml.XmlDocument xdoc = new System.Xml.XmlDocument();
+                    xdoc.Load(assembly.GetManifestResourceStream(name));
+                    string xml = XmlTransform.ToString(xdoc);
+                    Hash hash = XmlTransform.FromXml(xdoc) as Hash;
+                    Assert.NotNull(hash);
+                    System.Xml.XmlDocument xdoc2 = XmlTransform.ToXml(hash);
+                    string xml2 = XmlTransform.ToString(xdoc2);
+                    //Assert.AreEqual(xml, xml2);
+                    //Hash hash2 = XmlTransform.FromXml(xdoc) as Hash;
+                   // Assert.True(hash.Equals(hash2));
+                }
+            }
+        }
+        [TestCase]
         public void Hash_Xml_Transformations()
         {
             Assert.IsNull(XmlTransform.ToXml(null));
