@@ -2,6 +2,21 @@
 {
     public class Reader : System.IDisposable
     {
+        public static object Parse(string json)
+        {
+            using(Reader reader = new Reader())
+            {
+                return reader.Read(json);
+            }
+        }
+
+        public static object Parse(System.IO.Stream stream)
+        {
+            using(Reader reader = new Reader())
+            {
+                return reader.Read(stream);
+            }
+        }
         private System.IO.StreamReader streamReader = null;
         public void Dispose()
         {

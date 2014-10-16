@@ -2,6 +2,13 @@
 {
     public class Writer : System.IDisposable
     {
+        public static string ToJson(string value)
+        {
+            using(Writer writer = new Writer())
+            {
+                return writer.ToString(value);
+            }
+        }
         private System.IO.StreamWriter streamWriter = null;
         public void Dispose()
         {

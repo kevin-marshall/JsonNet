@@ -13,6 +13,7 @@
                 Add(array[i]);
             }
         }
+        
         public int CompareTo(object value){return CompareHelper.Compare(this, value);}
 
         public override bool Equals(object obj){return CompareTo(obj) == 0 ? true : false;}

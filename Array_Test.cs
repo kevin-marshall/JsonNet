@@ -39,10 +39,6 @@ namespace JsonNet
             arr.InsertRange(0, items);
             Assert.AreEqual(items.Count * 2, arr.Count);
             arr.Insert(0, "b");
-
-            Array copy = new Array();
-            CopyHelper.Copy(arr, copy);
-            Assert.True(arr.Equals(copy));
         }
         [TestCase]
         public void Array_TestConstraints()
