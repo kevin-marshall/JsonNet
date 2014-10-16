@@ -9,9 +9,13 @@ task :update_dependencies do
 	  dest = "./dep/#{f}"
       if(File.exists?(source))
 	    if(File.exists?(dest))
-	      FileUtils.cp(source,dest) if(File.mtime(source) > File.mtime(dest))
+		  if(File.mtime(source) > File.mtime(dest))
+		    FileUtils.cp(source,dest) 
+			puts "copied " + Color.green + source + Color.clear + " to " + Color.green + dest + Color.clear
+		  end
 	    else
 	      FileUtils.cp(source,dest)
+		  puts "copied " + Color.green + source + Color.clear + " to " + Color.green + dest + Color.clear
 	    end
 	  end
     }
