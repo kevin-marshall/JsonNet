@@ -9,6 +9,14 @@
                 return writer.ToString(value);
             }
         }
+
+        public static void Write(object value,System.IO.Stream stream)
+        {
+            using(Writer writer = new Writer())
+            {
+                writer.Write(value, stream);
+            }
+        }
         private System.IO.StreamWriter streamWriter = null;
         public void Dispose()
         {
