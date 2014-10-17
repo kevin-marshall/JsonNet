@@ -6,7 +6,7 @@ DEV_TASKS[:dependencies][:source]=
  "#{dep}/github/lou-parslow/QcNet/develop/bin/Net4.0/Release/QcNet.dll"]
 DEV_TASKS.update 
 
-task :default => [:dev_tasks_default] do
+task :default => [:upgrade,:dev_tasks_default] do
 end
 
 #
