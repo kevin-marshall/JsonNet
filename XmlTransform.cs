@@ -42,7 +42,7 @@
                 keyNameAttribute.Value = key;
                 keyElement.Attributes.Append(keyNameAttribute);
 
-                keyElement.AppendChild(ToXml(xdoc,hash[key]));
+                keyElement.AppendChild(ToXml(xdoc,(object)hash[key]));
             }
             return element;
         }

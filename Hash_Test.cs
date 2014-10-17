@@ -33,9 +33,11 @@ namespace JsonNet
             h["bool"] = false;
             h["null"] = null;
             h["double"] = 1.5;
+            h["double_0"] = 0;
             h["Array"] = new Array("[0,1,2,3]");
             h["Hash"] = new Hash("{'a':0}");
-            Assert.AreEqual(6, h.Count);
+            Assert.AreEqual(7, h.Count);
+            h["Array"].Add(4);
         }
 
         [TestCase]

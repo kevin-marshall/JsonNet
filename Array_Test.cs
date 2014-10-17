@@ -31,14 +31,25 @@ namespace JsonNet
         [TestCase]
         public void Array_Usage()
         {
+            Array a = new Array();
+            a.Add(0);
+
             System.Collections.Generic.List<object> items = new System.Collections.Generic.List<object>();
             items.Add(null);
             items.Add("a");
+            items.Add(0);
+            items.Add(false);
+            items.Add(new Array("[0,1,2]"));
+            items.Add(new Hash("{'a':'a'}"));
             Array arr = new Array();
             arr.AddRange(items);
             arr.InsertRange(0, items);
             Assert.AreEqual(items.Count * 2, arr.Count);
-            arr.Insert(0, "b");
+
+            arr.Insert(0, 3);
+            arr.Add(new Array("[0,1,2,3]"));
+            arr[arr.Count-1].Add(4);
+            arr.Insert(0, 5);
         }
         [TestCase]
         public void Array_TestConstraints()

@@ -1,6 +1,6 @@
 ﻿namespace JsonNet
 {
-    public sealed class Hash : System.Collections.Generic.Dictionary<string,object>,
+    public sealed class Hash : System.Collections.Generic.Dictionary<string,dynamic>,
                                System.IComparable
     {
         public Hash() { }
@@ -17,12 +17,20 @@
 
         public override int GetHashCode() { return HashCodeHelper.GetHashCode(this); }
 
-        public new object this[string key]
+        private object GetValidItem(object item)
+        {
+            if (object.ReferenceEquals(null, item)) return item;
+            if (item.GetType() == typeof(System.Int32)) { double value = (int)item; return value; }
+            return item;
+        }
+
+        public new dynamic this[string key]
         {
             get { return base[key]; }
             set
             {
-                if (IsValidItem(value)) base[key] = value;
+                object vitem = GetValidItem(value);
+                if (IsValidItem(vitem)) base[key] = vitem;
                 else throw new System.ArgumentOutOfRangeException(
                         "only null,string,double,bool,Array,Hash instances are value for Hash.this[string key]");
             }

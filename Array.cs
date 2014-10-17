@@ -1,6 +1,6 @@
 ﻿namespace JsonNet
 {
-    public sealed class Array : System.Collections.Generic.List<object>,
+    public sealed class Array : System.Collections.Generic.List<dynamic>,
                                 System.IComparable
     {
         public Array() { }
@@ -18,29 +18,40 @@
 
         public override int GetHashCode(){return HashCodeHelper.GetHashCode(this);}
 
+        private object GetValidItem(object item)
+        {
+            if (object.ReferenceEquals(null, item)) return item;
+            if(item.GetType()==typeof(System.Int32)) {double value = (int)item; return value;}
+            return item;
+        }
         
         public new void Add(object item)
         {
-            if(IsValidItem(item)) base.Add(item);
+            object vitem = GetValidItem(item);
+            if (IsValidItem(vitem)) base.Add(vitem);
             else throw new System.ArgumentOutOfRangeException("item", item,
                         "only null,string,double,bool,Array,Hash instances are value for Array.Add");
         }
         public new void AddRange(System.Collections.Generic.IEnumerable<object> items)
         {
             bool hasInvalidItem = false;
+            System.Collections.Generic.List<object> validItems = new System.Collections.Generic.List<object>();
             System.Collections.IEnumerator denum = items.GetEnumerator();
             while(denum.MoveNext() && !hasInvalidItem)
             {
-                if (!IsValidItem(denum.Current)) hasInvalidItem = true;
+                object vitem = GetValidItem(denum.Current);
+                if (!IsValidItem(vitem)) hasInvalidItem = true;
+                else validItems.Add(vitem);
             }
-            if (!hasInvalidItem) base.AddRange(items);
+            if (!hasInvalidItem) base.AddRange(validItems);
             else throw new System.ArgumentOutOfRangeException("items", items,
                         "only null,string,double,bool,Array,Hash instances are value for Array.AddRange");
         }
 
         public new void Insert(int index,object item)
         {
-            if(IsValidItem(item)) base.Insert(index,item);
+            object vitem = GetValidItem(item);
+            if(IsValidItem(vitem)) base.Insert(index,vitem);
             else throw new System.ArgumentOutOfRangeException("item", item,
                         "only null,string,double,bool,Array,Hash instances are value for Array.Insert");
         }
@@ -48,12 +59,15 @@
         public new void InsertRange(int index,System.Collections.Generic.IEnumerable<object> items)
         {
             bool hasInvalidItem = false;
+            System.Collections.Generic.List<object> validItems = new System.Collections.Generic.List<object>();
             System.Collections.IEnumerator denum = items.GetEnumerator();
             while (denum.MoveNext() && !hasInvalidItem)
             {
-                if (!IsValidItem(denum.Current)) hasInvalidItem = true;
+                object vitem = GetValidItem(denum.Current);
+                if (!IsValidItem(vitem)) hasInvalidItem = true;
+                else validItems.Add(vitem);
             }
-            if (!hasInvalidItem) base.InsertRange(index,items);
+            if (!hasInvalidItem) base.InsertRange(index, validItems);
             else throw new System.ArgumentOutOfRangeException("items", items,
                         "only null,string,double,bool,Array,Hash instances are value for Array.InsertRange");
         }
