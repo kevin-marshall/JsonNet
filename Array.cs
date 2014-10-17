@@ -88,5 +88,13 @@
             Writer writer = new Writer();
             return writer.ToString(this);
         }
+
+        public void Write(System.IO.Stream stream) { Writer.WriteToStream(this, stream); }
+        public void Read(System.IO.Stream stream) 
+        { 
+            Clear(); 
+            Array that = Reader.Parse(stream) as Array;
+            for (int i = 0; i < that.Count; ++i) { Add(that[i]);}
+        }
     }
 }
