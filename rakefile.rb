@@ -1,13 +1,14 @@
 require 'dev_tasks'
 
-dep="#{Environment.dev_root}/dep"
-DEV_TASKS[:dependencies][:source]=
-["#{dep}/github/lou-parslow/NetLibs/develop/NUnit/2.6.3/bin/framework/nunit.framework.dll",
- "#{dep}/github/lou-parslow/QcNet/develop/bin/Net4.0/Release/QcNet.dll"]
 DEV_TASKS[:dependencies][:rake]=["#{Environment.dev_root}/wrk/github/lou-parslow/QcNet"]
+
+DEV_TASKS[:dependencies][:source]=
+["#{Environment.dev_root}/dep/github/lou-parslow/NetLibs/develop/NUnit/2.6.3/bin/framework/nunit.framework.dll",
+ "#{Environment.dev_root}/dep/github/lou-parslow/QcNet/develop/bin/Net4.0/Release/QcNet.dll"]
+ 
 DEV_TASKS.update 
 
-task :default => [:upgrade,:dev_tasks_default] do
+task :default => [:dev_tasks_default] do
 end
 
 #
