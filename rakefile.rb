@@ -1,28 +1,12 @@
 require 'dev_tasks'
 
-task :update_dependencies do
-  Console.announce_task_start 'update_dependencies'
-  if(DEV_TASKS.has_key?(:branch) && DEV_TASKS[:branch]=='develop')
-    # QcNet.dll,nunit.framework.dll
-    ["nunit.framework.dll","QcNet.dll"].each{|f|
-      source = "#{Environment.dev_root}/wrk/github/lou-parslow/QcNet/bin/Net4.0/Release/#{f}"
-	  dest = "./dep/#{f}"
-      if(File.exists?(source))
-	    if(File.exists?(dest))
-		  if(File.mtime(source) > File.mtime(dest))
-		    FileUtils.cp(source,dest) 
-			puts "copied " + Color.green + source + Color.clear + " to " + Color.green + dest + Color.clear
-		  end
-	    else
-	      FileUtils.cp(source,dest)
-		  puts "copied " + Color.green + source + Color.clear + " to " + Color.green + dest + Color.clear
-	    end
-	  end
-    }
-  end
-end
+dep="#{Environment.dev_root}/dep"
+DEV_TASKS[:dependencies][:source]=
+["#{dep}/github/lou-parslow/NetLibs/NUnit/2.6.3/bin/framework/nunit.framework.dll",
+ "#{dep}/github/lou-parslow/QcNet/develop/bin/Net4.0/Release/QcNet.dll"]
+DEV_TASKS.update 
 
-task :default => [:update_dependencies,:dev_tasks_default] do
+task :default => [:dev_tasks_default] do
 end
 
 #
