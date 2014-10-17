@@ -25,7 +25,20 @@ namespace JsonNet
             arrays.SetUp();
             foreach(string key in Keys)
             {
-
+                foreach (string hashKey in hashes.Keys)
+                {
+                    using (System.IO.FileStream fs = new System.IO.FileStream(GetUnitTestFilename(key + "." + "Hash." + hashKey + ".json"),System.IO.FileMode.Create))
+                    {
+                        this[key].Write(hashes[hashKey], fs);
+                    }
+                }
+                foreach(string arrKey in arrays.Keys)
+                {
+                    using (System.IO.FileStream fs = new System.IO.FileStream(GetUnitTestFilename(key + "." + "Array." + arrKey + ".json"), System.IO.FileMode.Create))
+                    {
+                        this[key].Write(arrays[arrKey], fs);
+                    }
+                }
             }
         }
         [TestCase]

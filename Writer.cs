@@ -16,17 +16,17 @@
 
         private int level = 0;
 
-        public static string ToJson(object value)
+        public static string ToJson(object value,JsonFormat format = JsonFormat.Compressed)
         {
-            using(Writer writer = new Writer())
+            using(Writer writer = new Writer(format))
             {
                 return writer.ToString(value);
             }
         }
 
-        public static void WriteToStream(object value,System.IO.Stream stream)
+        public static void WriteToStream(object value,System.IO.Stream stream,JsonFormat format = JsonFormat.Compressed)
         {
-            using(Writer writer = new Writer())
+            using(Writer writer = new Writer(format))
             {
                 writer.Write(value, stream);
             }
@@ -73,7 +73,8 @@
         private string GetIndent()
         {
             if (Format == JsonFormat.Compressed) return "";
-            return "".PadRight(level * 2);
+            if (level == 0) return "";
+            return System.Environment.NewLine + "".PadRight(level * 2);
         }
         private void Write(object value,System.IO.StreamWriter streamWriter)
         {
@@ -84,18 +85,17 @@
             {
                 streamWriter.Write(GetIndent() + "{");
                 ++level;
-                if (Format == JsonFormat.Indented) streamWriter.Write(System.Environment.NewLine);
                 int index = 0;
                 foreach(object key in idictionary.Keys)
                 {
                     if (index > 0) streamWriter.Write(",");
-                    streamWriter.Write("\"" + key.ToString() + "\":");
+                    streamWriter.Write(GetIndent() + "\"" + key.ToString() + "\":");
                     Write(idictionary[key], streamWriter);
                     ++index;
                 }
-                streamWriter.Write(GetIndent() + "}");
                 --level;
-                if (Format == JsonFormat.Indented) streamWriter.Write(System.Environment.NewLine);
+                if (level == 0 && Format == JsonFormat.Indented) streamWriter.Write(System.Environment.NewLine);
+                streamWriter.Write(GetIndent() + "}");
                 return;
             }
             if(value.GetType()==typeof(System.String))
@@ -107,16 +107,20 @@
             System.Collections.IEnumerable ienumerable = value as System.Collections.IEnumerable;
             if(!object.ReferenceEquals(null,ienumerable))
             {
-                streamWriter.Write("[");
+                streamWriter.Write(GetIndent() + "[");
+                ++level;
                 System.Collections.IEnumerator denum = ienumerable.GetEnumerator();
                 int index = 0;
                 while(denum.MoveNext())
                 {
-                    if (index > 0) streamWriter.Write(",");
+                    if (index > 0) streamWriter.Write(","+GetIndent());
+                    else streamWriter.Write(GetIndent());
                     Write(denum.Current, streamWriter);
                     ++index;
                 }
-                streamWriter.Write("]");
+                --level;
+                if (level == 0 && Format == JsonFormat.Indented) streamWriter.Write(System.Environment.NewLine);
+                streamWriter.Write(GetIndent() + "]");
                 return;
             }
             if (value.GetType() == typeof(System.Double)) { streamWriter.Write(value.ToString()); return; }
