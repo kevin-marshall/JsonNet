@@ -59,5 +59,13 @@
             Writer writer = new Writer();
             return writer.ToString(this);
         }
+        public void Write(System.IO.Stream stream) { JsonNet.Writer.WriteToStream(this, stream); }
+        public void Save(string filename)
+        {
+            using (System.IO.FileStream fs = new System.IO.FileStream(filename, System.IO.FileMode.Create))
+            {
+                Write(fs);
+            }
+        }
     }
 }

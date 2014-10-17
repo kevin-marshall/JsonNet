@@ -1,7 +1,21 @@
 ﻿namespace JsonNet
 {
+    public enum JsonFormat { Compressed, Indented };
+
     public class Writer : System.IDisposable
     {
+        public Writer() { }
+        public Writer(JsonFormat value) { format = value; }
+        private JsonFormat format = JsonFormat.Compressed;
+
+        public JsonFormat Format
+        {
+            get { return format; }
+            set { format = value; }
+        }
+
+        private int level = 0;
+
         public static string ToJson(object value)
         {
             using(Writer writer = new Writer())
@@ -18,6 +32,7 @@
             }
         }
         private System.IO.StreamWriter streamWriter = null;
+
         public void Dispose()
         {
             Dispose(true);
@@ -55,6 +70,11 @@
 
         }
 
+        private string GetIndent()
+        {
+            if (Format == JsonFormat.Compressed) return "";
+            return "".PadRight(level * 2);
+        }
         private void Write(object value,System.IO.StreamWriter streamWriter)
         {
             if(object.ReferenceEquals(null,value)) {streamWriter.Write("null");return;}
@@ -62,7 +82,9 @@
             System.Collections.IDictionary idictionary = value as System.Collections.IDictionary;
             if(!object.ReferenceEquals(null,idictionary))
             {
-                streamWriter.Write("{");
+                streamWriter.Write(GetIndent() + "{");
+                ++level;
+                if (Format == JsonFormat.Indented) streamWriter.Write(System.Environment.NewLine);
                 int index = 0;
                 foreach(object key in idictionary.Keys)
                 {
@@ -71,7 +93,9 @@
                     Write(idictionary[key], streamWriter);
                     ++index;
                 }
-                streamWriter.Write("}");
+                streamWriter.Write(GetIndent() + "}");
+                --level;
+                if (Format == JsonFormat.Indented) streamWriter.Write(System.Environment.NewLine);
                 return;
             }
             if(value.GetType()==typeof(System.String))
