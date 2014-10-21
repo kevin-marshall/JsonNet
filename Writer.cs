@@ -1,6 +1,7 @@
 ﻿namespace JsonNet
 {
     public enum JsonFormat { Compressed, Indented };
+    
 
     public class Writer : System.IDisposable
     {
@@ -13,6 +14,8 @@
             get { return format; }
             set { format = value; }
         }
+
+        public bool WriteByteArrays = false;
 
         private int level = 0;
 
@@ -128,6 +131,12 @@
             {
                 if (((bool)value)) { streamWriter.Write("true"); return; }
                 else { streamWriter.Write("false"); return; }
+            }
+            if(WriteByteArrays && value.GetType() == typeof(byte[]))
+            {
+                string svalue = "base64:" + System.Convert.ToBase64String((byte[])(value));
+                streamWriter.Write("\"" + svalue + "\"");
+                return;
             }
         }
     }
