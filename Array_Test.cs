@@ -18,6 +18,7 @@ namespace JsonNet
             Add("strings_b", new Array("['b']"));
             Add("doubles_0", new Array("[0]"));
             Add("doubles_1", new Array("[1]"));
+            Add("doubles_negatives", new Array("[1,-2,-3,4]"));
             Add("bool_true", new Array("[true]"));
             Add("bool_true2", new Array("[true]"));
             Add("bool_false", new Array("[false]"));
@@ -50,6 +51,9 @@ namespace JsonNet
             arr.Add(new Array("[0,1,2,3]"));
             arr[arr.Count-1].Add(4);
             arr.Insert(0, 5);
+
+            Array negatives = this["doubles_negatives"] as Array;
+            Assert.AreEqual(-2, (double)negatives[1]);
         }
         [TestCase]
         public void Array_TestConstraints()
